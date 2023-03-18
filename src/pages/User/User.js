@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import SubirFoto from "../EditarUser.js/SubirFoto";
 import EditarAlbum from "../EditarAlbumes/EditarAlbum";
 import VerFotos from "../VerFotos/VerFotos";
+import DetectarTexto from '../DetectarTexto/DetectarTexto'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +59,7 @@ function User(props) {
   const [subirFoto, setSubirFoto] = useState(false);
   const [editarAlbum, setEditarAlbum] = useState(false);
   const [verFotos, setVerFotos] = useState(false);
+  const [detectarTexto, setDetectarTexto] = useState(false);
 
   const handleEditarPerfil = () => {
     setEditarPerfil(true);
@@ -75,6 +77,10 @@ function User(props) {
     setVerFotos(true);
   };
 
+  const handleDetectarTexto = () => {
+    setDetectarTexto(true);
+  }
+
   const handleLogout = () => {
     window.location.href = "/";
   };
@@ -89,6 +95,8 @@ function User(props) {
         <EditarAlbum data={props.data} />
       ) : verFotos ? (
         <VerFotos data={props.data} />
+      ) : detectarTexto ? (
+        <DetectarTexto />
       ) : (
         <div className={classes.root}>
           <Card className={classes.card}>
@@ -171,6 +179,16 @@ function User(props) {
                         onClick={handleEditarAlbum}
                       >
                         Editar albumes
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        onClick={handleDetectarTexto}
+                      >
+                        Detectar Texto
                       </Button>
                     </Grid>
                     <Grid item xs={12}>
