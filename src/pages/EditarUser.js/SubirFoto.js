@@ -133,7 +133,7 @@ const handleSubir = () =>{
     photo : postImage.image
   }
   console.log(body);
-  /*axios
+  axios
       .post(`${API_URL}/images/upload`, body)
       .then((response) => {
         //props.data.Nombres = nombreEditar;
@@ -141,7 +141,7 @@ const handleSubir = () =>{
       })
       .catch((error) => {
         console.error(error);
-      });*/
+      });
 }
 
   return (
