@@ -56,11 +56,16 @@ const useStyles = makeStyles((theme) => ({
 function SubirFoto(props) {
   const { Usuario, Nombres, Contrasenia, Foto } = props.data;
   const classes = useStyles();
-  const imgUrl = Foto;
   const [nombreEditar, setNombreEditar] = useState(Nombres);
   const [regresar, setRegresar] = useState(false);
   const [nombreFoto, setNombreFoto] = useState("");
+  const [descripcionFoto, setDescripcionFoto] = useState("");
   const [nombreAlbum, setNombreAlbum] = useState("");
+  const [file, setFile] = useState();
+  const [postImage, setPostImage] = useState({
+    image: "",
+    idImage : ""
+  });
 
   const handleRegresar = () => {
     setRegresar(true);
@@ -92,6 +97,53 @@ function SubirFoto(props) {
     editUser();
   };
 
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result.split(',')[1]);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    const name = file.name;
+
+    const base64 = await convertToBase64(file);
+    setPostImage({ ...postImage, image: base64, idImage : name});
+    setFile(URL.createObjectURL(file));
+};
+
+const handleSubir = () =>{
+
+  let OriginalName = postImage.idImage.split('.');
+  let finalName = nombreFoto +'.'+ OriginalName[1];
+
+  const body = {
+    id : finalName,
+    description : descripcionFoto,
+    uType : 'publicadas',
+    album : 'publicadas',
+    user : Usuario,
+    photo : postImage.image
+  }
+  console.log(body);
+  /*axios
+      .post(`${API_URL}/images/upload`, body)
+      .then((response) => {
+        //props.data.Nombres = nombreEditar;
+        setRegresar(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });*/
+}
+
   return (
     <>
       {regresar ? (
@@ -111,17 +163,21 @@ function SubirFoto(props) {
               >
                 <Grid item xs={12} md={4}>
                   <img
-                    src={imgUrl}
+                    src={file}
                     alt="Imagen"
-                    style={{ maxWidth: 200, maxHeight: 200 }}
+                    style={{ maxWidth: 200, maxHeight: 200, objectFit: "scale-down"}}
                   />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                  >
-                    Ver fotos
-                  </Button>
+                  <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="fileUploader"
+                        name="fileUploader"
+                        autoFocus
+                        type='file'
+                        onChange={(e) => handleFileUpload(e)}
+                    />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <div className={classes.form}>
@@ -131,21 +187,12 @@ function SubirFoto(props) {
                       className={classes.input}
                       onChange={(event) => setNombreFoto(event.target.value)}
                     />
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="nombre-foto-label">
-                        Nombre Album
-                      </InputLabel>
-                      <Select
-                        labelId="nombre-foto-label"
-                        id="nombre-foto-select"
-                        value={nombreAlbum}
-                        onChange={handleChange}
-                      >
-                        <MenuItem value="foto1.jpg">Foto 1</MenuItem>
-                        <MenuItem value="foto2.jpg">Foto 2</MenuItem>
-                        <MenuItem value="foto3.jpg">Foto 3</MenuItem>
-                      </Select>
-                    </FormControl>
+                    <TextField
+                      label="Descripcion"
+                      value={descripcionFoto}
+                      className={classes.input}
+                      onChange={(event) => setDescripcionFoto(event.target.value)}
+                    />
                   </div>
                 </Grid>
                 <Grid item xs={12} md={4}>
@@ -165,6 +212,7 @@ function SubirFoto(props) {
                         variant="contained"
                         color="primary"
                         className={classes.button}
+                        onClick={handleSubir}
                       >
                         Cargar Foto
                       </Button>

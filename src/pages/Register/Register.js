@@ -80,6 +80,7 @@ const [file, setFile] = useState();
 
           const body2 = {
             id : postImage.idImage,
+            description : 'Foto Perfil',
             uType : 'perfil',
             album : 'perfil',
             user : userName,
