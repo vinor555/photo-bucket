@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext, useAuth } from "../../services/auth";
 import { Card, CardMedia, Button, makeStyles, CardContent, Typography, Grid, TextField } from "@material-ui/core";
 import messi from '../Dashboard/messi.jpg'
+import {EditarUser} from '../EditarUser.js/EditarUser'
+import SubirFoto from "../EditarUser.js/SubirFoto";
+import EditarAlbum from "../EditarAlbumes/EditarAlbum";
+import VerFotos from "../VerFotos/VerFotos";
+import DetectarTexto from "../DetectarTexto/DetectarTexto";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,13 +17,48 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "center",
       alignItems: "center",
       height: "100vh"
+  },
+  input: {
+    marginBottom: theme.spacing(2),
+    marginLeft: theme.spacing(1)
   }
 }))
 
-function Dashboard(props) {
+function DashboardUser(props) {
   console.log(props);
+  const {Usuario, Nombres, Contrasenia, Foto} = props.data;
   const classes = useStyles();
+  const imgUrl = Foto;
   const { isAuthenticated } = useContext(AuthContext);
+  const [editarPerfil, setEditarPerfil] = useState(false);
+  const [subirFoto, setSubirFoto] = useState(false);
+  const [editarAlbum, setEditarAlbum] = useState(false);
+  const [verFotos, setVerFotos] = useState(false);
+  const [detectarTexto, setDetectarTexto] = useState(false);
+
+  const handleEditarPerfil = () => {
+    setEditarPerfil(true);
+  };
+
+  const handleSubirFoto = () => {
+    setSubirFoto(true);
+  };
+
+  const handleEditarAlbum = () => {
+    setEditarAlbum(true);
+  };
+
+  const handleVerFotos = () => {
+    setVerFotos(true);
+  };
+
+  const handleDetectarTexto = () => {
+    setDetectarTexto(true);
+  }
+
+  const handleLogout = () => {
+    window.location.href = "/";
+  };
 
   /*useEffect(() => {
     console.log("estaAutenticado", isAuthenticated);
@@ -29,6 +69,16 @@ function Dashboard(props) {
   }, [isAuthenticated]);*/
 
   return (
+    <>
+      {subirFoto ? (
+        <SubirFoto data={props.data}/>
+      ): editarAlbum ? (
+        <EditarAlbum data={props.data} />
+      ): verFotos ? (
+        <VerFotos data={props.data} />
+      ): detectarTexto ? (
+        <DetectarTexto/>
+      ):  (
       <div className={classes.root}>
         <Card className={classes.card}>
           <CardContent>
@@ -68,29 +118,29 @@ function Dashboard(props) {
 
 
           <CardContent>
-          <Button
+          <Button className={classes.input}
             variant="contained"
             color="primary"
           >
             Ver Fotos
           </Button>
-          <Button
+          <Button className={classes.input}
             variant="contained"
             color="primary">
               Subir Foto
           </Button>
-          <Button
+          <Button className={classes.input}
             variant="contained"
             color="primary"
           >Editar Perfil
           </Button>
-          <Button
+          <Button className={classes.input}
             variant="contained"
             color="primary"
           >
             Extraer Texto
           </Button>
-          <Button
+          <Button className={classes.input}
             variant="contained"
             color="primary"
           >Cerrar Sesion</Button>
@@ -100,8 +150,10 @@ function Dashboard(props) {
         </Card>
 
       </div>
+      )}
+    </>
   )
 
 }
 
-export default Dashboard;
+export default DashboardUser;
