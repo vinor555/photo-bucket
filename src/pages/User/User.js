@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,6 +11,11 @@ import SubirFoto from "../EditarUser.js/SubirFoto";
 import EditarAlbum from "../EditarAlbumes/EditarAlbum";
 import VerFotos from "../VerFotos/VerFotos";
 import DetectarTexto from '../DetectarTexto/DetectarTexto'
+import axios from "axios";
+import { API_URL } from "../../utils/Constants";
+import { render } from "@testing-library/react";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +54,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function User(props) {
+
   const { Usuario, Nombres, Contrasenia, Foto } = props.data;
   const classes = useStyles();
   const imgUrl = Foto;
@@ -60,6 +67,9 @@ function User(props) {
   const [editarAlbum, setEditarAlbum] = useState(false);
   const [verFotos, setVerFotos] = useState(false);
   const [detectarTexto, setDetectarTexto] = useState(false);
+  const [etiquetas, setEtiquetas] = useState('');
+  const [imagebase64, SetImageBase64] = useState('');
+  const [labelTranslate, setLabelTranslate] = useState('')
 
   const handleEditarPerfil = () => {
     setEditarPerfil(true);
@@ -80,6 +90,57 @@ function User(props) {
   const handleDetectarTexto = () => {
     setDetectarTexto(true);
   }
+
+  const getImageBase64 = async() => {
+    const regex = /[^\/]+\.([a-zA-Z]+)$/;
+    const match = Foto.match(regex)
+    var filename = "";
+    if (match) {
+      filename = match[0];
+    } else {
+      console.log("La url no contiene una extension de archivo valia");
+    }
+    axios.post(`${API_URL}/images/downloadPerfil`, {
+      pathname: filename
+    })
+    .then((response) => {
+      SetImageBase64(response.data.image)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  const detectLabels = async() => {
+    axios.post(`${API_URL}/images/detectLabels`, {
+      image: imagebase64
+    })
+    .then((response) => {
+      setEtiquetas(response.data.labels)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  const translateText = async() => {
+    axios.post(`${API_URL}/text/translate`, {
+      text: etiquetas,
+      language: "es"
+    })
+    .then((response) => {
+      setLabelTranslate(response.data.traduccion)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  useEffect(() => {
+    getImageBase64();
+    detectLabels();
+    translateText();
+  })
 
   const handleLogout = () => {
     window.location.href = "/";
@@ -116,6 +177,9 @@ function User(props) {
                     alt="Imagen"
                     style={{ maxWidth: 200, maxHeight: 200 }}
                   />
+                  <Typography>
+                    {labelTranslate}
+                  </Typography>
                   <Button
                     variant="contained"
                     color="primary"
