@@ -8,6 +8,7 @@ import { useAuth } from "../../services/auth";
 import axios from "axios";
 import User from "../User/User";
 import { API_URL } from "../../utils/Constants";
+import Camera from '../Webcam/Camera';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,10 +45,15 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [auth, setAuth] = useState(false);
+  const [camera, setCamera] = useState(false);
   const [data, setData] = useState();
 
   const handleLogin = () => {
     loginUser();
+  };
+
+  const handleLoginReconFacial = () => {
+    setCamera(true);
   };
 
   function loginUser() {
@@ -78,6 +84,10 @@ function Login() {
     <>
       {auth ? (
         <User data={data} />
+      ) : camera ?(
+        <div className={classes.root}>
+        <Camera />
+        </div>
       ) : (
         <div className={classes.root}>
           <Paper elevation={3} className={classes.paper}>
@@ -115,6 +125,17 @@ function Login() {
                 onClick={handleLogin}
               >
                 Iniciar sesión
+              </Button>
+
+              <Button
+                //type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleLoginReconFacial}
+              >
+                Entrar por camara
               </Button>
 
               <Link to="/register" className={classes.link}>

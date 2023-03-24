@@ -11,6 +11,7 @@ import SubirFoto from "../EditarUser.js/SubirFoto";
 import EditarAlbum from "../EditarAlbumes/EditarAlbum";
 import VerFotos from "../VerFotos/VerFotos";
 import DetectarTexto from '../DetectarTexto/DetectarTexto'
+import Gallery from '../ImageList/Gallery'
 import axios from "axios";
 import { API_URL } from "../../utils/Constants";
 import { render } from "@testing-library/react";
@@ -67,6 +68,7 @@ function User(props) {
   const [editarAlbum, setEditarAlbum] = useState(false);
   const [verFotos, setVerFotos] = useState(false);
   const [detectarTexto, setDetectarTexto] = useState(false);
+  const [gallery, setGallery] = useState(false);
   const [etiquetas, setEtiquetas] = useState('');
   const [imagebase64, SetImageBase64] = useState('');
   const [labelTranslate, setLabelTranslate] = useState('')
@@ -89,6 +91,10 @@ function User(props) {
 
   const handleDetectarTexto = () => {
     setDetectarTexto(true);
+  }
+
+  const handleGallery = () => {
+    setGallery(true);
   }
 
   const getImageBase64 = async() => {
@@ -158,6 +164,8 @@ function User(props) {
         <VerFotos data={props.data} />
       ) : detectarTexto ? (
         <DetectarTexto />
+      ) : gallery ? (
+        <Gallery />
       ) : (
         <div className={classes.root}>
           <Card className={classes.card}>
@@ -184,7 +192,7 @@ function User(props) {
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    onClick={handleVerFotos}
+                    onClick={handleGallery}
                   >
                     Ver fotos
                   </Button>
