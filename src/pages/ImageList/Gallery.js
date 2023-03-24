@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../utils/Constants";
 import Detalle from '../DetalleFoto/Detalle'
+import User from "../User/User";
 import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Gallery() {
+function Gallery(props) {
 
   const classes = useStyles();
 
@@ -49,6 +50,12 @@ function Gallery() {
   const [Fnombre, setName] = useState("");
   const [fotoName, setFotoName] = useState([]);
   const [auth, setAuth] = useState(false);
+  const [verHome, setVerHome] = useState(false);
+
+
+  const handleVolver = () => {
+    setVerHome(true);
+  };
 
 
   const handleDetalle = (name) => {
@@ -86,9 +93,21 @@ function Gallery() {
     <>
       {auth ? (
         <Detalle data={fotoName} />
+      ) : verHome ? (
+        <User data={props.data}/>
       ) : (
         <div className={classes.root}>
           <Paper elevation={3} className={classes.paper}>
+            <Button
+              //type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={handleVolver}
+            >
+              Regresar
+            </Button>
             <ImageList sx={{ width: 700, height: 650 }}>
               <ImageListItem key="Subheader" cols={2}>
                 <ListSubheader component="div">Galeria de fotos</ListSubheader>

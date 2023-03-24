@@ -165,7 +165,7 @@ function User(props) {
       ) : detectarTexto ? (
         <DetectarTexto />
       ) : gallery ? (
-        <Gallery />
+        <Gallery data={props.data}/>
       ) : (
         <div className={classes.root}>
           <Card className={classes.card}>
