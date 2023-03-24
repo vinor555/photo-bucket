@@ -9,6 +9,7 @@ import { useAuth } from "../../services/auth";
 import axios from "axios";
 import User from "../User/User";
 import { API_URL } from "../../utils/Constants";
+import Gallery from '../ImageList/Gallery'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,7 +68,7 @@ function Foto(props) {
   return (
     <>
       { verFotos ? (
-        <VerFotos data={props.data} />
+        <Gallery />
       ) : (
         <div className={classes.root}>
           <Paper elevation={3} className={classes.paper}>
@@ -83,7 +84,7 @@ function Foto(props) {
                 margin="normal"
                 required
                 fullWidth
-                readonly
+                
                 multiline
                 value={Nombre}
                 className={classes.input}
@@ -104,7 +105,6 @@ function Foto(props) {
                 required
                 fullWidth
                 multiline
-                readonly
                 id="Descrip"
                 label="Descripcion"
                 value={Descri}
@@ -123,7 +123,7 @@ function Foto(props) {
                 margin="normal"
                 required
                 fullWidth
-                readonly
+                
                 multiline
                 value="Datos de la Traduccion"
                 name="Trad"

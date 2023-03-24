@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../utils/Constants";
 import Detalle from '../DetalleFoto/Detalle'
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,16 +51,16 @@ function Gallery() {
   const [auth, setAuth] = useState(false);
 
 
-  const handleDetalle = () => {
-    FotoDetalle();
+  const handleDetalle = (name) => {
+    FotoDetalle(name);
   };
 
-  function FotoDetalle() {
+  function FotoDetalle(name) {
     axios
-      .get(`${API_URL}/images/detallefoto/${Fnombre}`)
+      .get(`${API_URL}/images/detallefoto/${name}`)
       .then((response) => {
-        //console.log(response.data.result);
-        setFotoName(response.data.result);
+        console.log(response.data.foto);
+        setFotoName(response.data.foto);
         setAuth(true);
       })
       .catch((error) => {
@@ -75,6 +76,12 @@ function Gallery() {
     };
     getFotos();
   }, []);
+
+  function handleClick (name)  {
+    console.log(name);
+    setName(name);
+    handleDetalle(name);
+  };
   return (
     <>
       {auth ? (
@@ -93,20 +100,25 @@ function Gallery() {
                     srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
                     alt={item.name}
                     loading="lazy"
-                    onClick={setName(item.name)}
-                    onDoubleClick={handleDetalle}
                   />
                   <ImageListItemBar
                     title={item.name}
                     subtitle={item.user}
                     actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                        aria-label={`info about ${item.name}`}
-                      >
-                        <InfoIcon />
-                      </IconButton>
+                      <Button 
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        value={item.name}
+                        onClick={() => handleClick(item.name)}
+                        >
+                          Ver
+                        </Button>
+
                     }
+                    
                   />
                 </ImageListItem>
               ))}
