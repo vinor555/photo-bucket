@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import VerFotos from "../VerFotos/VerFotos";
 import { useAuth } from "../../services/auth";
 import axios from "axios";
 import User from "../User/User";
@@ -49,23 +50,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Foto() {
+function Foto(props) {
+  const {Foto, Nombre, Descri } = props.data;
   const classes = useStyles();
-  const [error, setError] = useState(null);
-  const [auth, setAuth] = useState(false);
-  const [data, setData] = useState();
+  const imgUrl = Foto;
+  const input1 = "Input 1";
+  const input2 = "Input 2";
+  const [verFotos, setVerFotos] = useState(false);
 
-  const imgUrl = "appa.jpg";
 
- /* const handleBack = () => {
-
-  };*/
+  const handleVerFotos = () => {
+    setVerFotos(true);
+  };
 
 
   return (
     <>
-      {auth ? (
-        <User data={data} />
+      { verFotos ? (
+        <VerFotos data={props.data} />
       ) : (
         <div className={classes.root}>
           <Paper elevation={3} className={classes.paper}>
@@ -83,7 +85,8 @@ function Foto() {
                 fullWidth
                 readonly
                 multiline
-                value="Nombre Foto"
+                value={Nombre}
+                className={classes.input}
                 name="name"
                 label="Nombre"
                 id="name"
@@ -104,7 +107,8 @@ function Foto() {
                 readonly
                 id="Descrip"
                 label="Descripcion"
-                value="Datos de la Descripcion"
+                value={Descri}
+                className={classes.input}
                 name="Descrip"
               />
               <div>Opciones:</div>
@@ -132,7 +136,7 @@ function Foto() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-               // onClick={handleBack}
+                onClick={handleVerFotos}
               >
                 Regresar
               </Button>
@@ -140,7 +144,6 @@ function Foto() {
 
           </Paper>
         </div>
-
       )}
     </>
 

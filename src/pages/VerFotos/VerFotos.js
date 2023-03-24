@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import SubirFoto from "../EditarUser.js/SubirFoto";
 import EditarAlbum from "../EditarAlbumes/EditarAlbum";
 import axios from "axios";
+import Detalle from '../DetalleFoto/Detalle'
 import { API_URL } from "../../utils/Constants";
 import Carousel from "react-material-ui-carousel";
 import AliceCarousel from "react-alice-carousel";
@@ -81,6 +82,13 @@ function VerFotos(props) {
     window.location.href = "/";
   };
 
+  const handleDetalle = () => {
+    FotoDetall();
+  };
+
+
+
+
   function getAlbum() {
     axios
       .get(`${API_URL}/album/getList/${Usuario}`)
@@ -142,6 +150,7 @@ function VerFotos(props) {
               src={foto.URLFotos}
               alt=""
               style={{ width: 200, height: 200 }}
+              onClick={handleDetalle()}
             />
           ))}
         </AliceCarousel>
