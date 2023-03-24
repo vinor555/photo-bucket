@@ -84,9 +84,9 @@ function Login() {
     <>
       {auth ? (
         <User data={data} />
-      ) : camera ?(
+      ) : camera ? (
         <div className={classes.root}>
-        <Camera />
+        <Camera data={email}/>
         </div>
       ) : (
         <div className={classes.root}>
