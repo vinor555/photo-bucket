@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Gallery(props) {
+  const { Usuario, Nombres, Contrasenia, Foto } = props.data;
 
   const classes = useStyles();
 
@@ -77,12 +78,12 @@ function Gallery(props) {
 
   useEffect(() => {
     const getFotos = async () => {
-      const res = await axios.get(`${API_URL}/images/getImagesByUser/aleesan777`);
+      const res = await axios.get(`${API_URL}/images/getImagesByUser/${Usuario}`);
       console.log(res);
       setFotos(res.data.result);
     };
     getFotos();
-  }, []);
+  }, [Usuario]);
 
   function handleClick (name)  {
     console.log(name);
