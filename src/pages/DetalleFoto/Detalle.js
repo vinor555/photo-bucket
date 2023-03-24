@@ -52,22 +52,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Foto(props) {
-  const {Foto, Nombre, Descri } = props.data;
+  const { Foto, Nombre, Descri } = props.data;
   const classes = useStyles();
   const imgUrl = Foto;
   const input1 = "Input 1";
   const input2 = "Input 2";
   const [verFotos, setVerFotos] = useState(false);
+  const [data, setData] = useState();
+  const [Texto, setDescrip] = useState("");
+  const [idioma, setLenguage] = useState("");
 
 
   const handleVerFotos = () => {
     setVerFotos(true);
   };
 
+  const handleTraducir = () => {
+    console.log(Descri);
+    console.log(idioma);
+    TraducDescri();
+  };
+
+  function TraducDescri() {
+    const body = {
+      text: Descri,
+      language: idioma,
+    };
+    axios
+      .post(`${API_URL}/text/translate`, body)
+      .then((response) => {
+        setData(response.data.traduccion);
+        console.log(response.data.traduccion);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
 
   return (
     <>
-      { verFotos ? (
+      {verFotos ? (
         <Gallery />
       ) : (
         <div className={classes.root}>
@@ -84,7 +109,7 @@ function Foto(props) {
                 margin="normal"
                 required
                 fullWidth
-                
+
                 multiline
                 value={Nombre}
                 className={classes.input}
@@ -112,10 +137,10 @@ function Foto(props) {
                 name="Descrip"
               />
               <div>Opciones:</div>
-              <select name="opcion" id="opcion">
-                <option value="Idioma1">Idioma1</option>
-                <option value="Idioma2">Idioma2</option>
-                <option value="Idioma3">Idioma3</option>
+              <select name="opcion" id="opcion" onChange={(event) => setLenguage(event.target.value)}>
+                <option value="en">Ingles</option>
+                <option value="ja">Japones</option>
+                <option value="pt">Portugues</option>
               </select>
 
               <TextField
@@ -123,13 +148,22 @@ function Foto(props) {
                 margin="normal"
                 required
                 fullWidth
-                
+
                 multiline
-                value="Datos de la Traduccion"
+                value={data}
                 name="Trad"
-                label="Traduccion"
                 id="Trad"
               />
+              <Button
+                //type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleTraducir}
+              >
+                Traducir
+              </Button>
               <Button
                 //type="submit"
                 fullWidth
