@@ -128,13 +128,13 @@ const handleSubir = () =>{
     id : finalName,
     description : descripcionFoto,
     uType : 'publicadas',
-    album : 'publicadas',
+    //album : 'publicadas',
     user : Usuario,
     photo : postImage.image
   }
   console.log(body);
   axios
-      .post(`${API_URL}/images/upload`, body)
+      .post(`${API_URL}/images/uploadPhoto`, body)
       .then((response) => {
         //props.data.Nombres = nombreEditar;
         setRegresar(true);
