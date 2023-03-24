@@ -82,9 +82,6 @@ function VerFotos(props) {
     window.location.href = "/";
   };
 
-  const handleDetalle = () => {
-    FotoDetall();
-  };
 
 
 
@@ -150,7 +147,6 @@ function VerFotos(props) {
               src={foto.URLFotos}
               alt=""
               style={{ width: 200, height: 200 }}
-              onClick={handleDetalle()}
             />
           ))}
         </AliceCarousel>
